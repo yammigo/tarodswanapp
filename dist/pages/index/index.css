@@ -1,4 +1,32 @@
 
+.Pdate {
+  width: 100%;
+  height: 70rpx;
+  background: #DA5751;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.Pdate .date_select {
+  width: 220rpx;
+  letter-spacing: 3rpx;
+  color: white;
+  font-size: 30rpx;
+}
 .dayHeader {
   width: 100%;
   height: 150rpx;
@@ -12,7 +40,50 @@
   -webkit-flex-direction: row;
       -ms-flex-direction: row;
           flex-direction: row;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
   color: white;
+  position: relative;
+}
+.dayHeader .day_date {
+  width: 150rpx;
+  height: 100%;
+  text-align: center;
+  line-height: 150rpx;
+  font-weight: bold;
+  font-size: 100rpx;
+}
+.dayHeader .day_info {
+  width: 200rpx;
+  height: 150rpx;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  font-size: 30rpx;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-weight: bold;
+}
+.dayHeader .today {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  border: solid 2rpx #fff;
+  text-align: center;
+  line-height: 80rpx;
+  position: absolute;
+  right: 20rpx;
+  font-weight: bold;
 }
 .contentDate {
   display: -webkit-box;
@@ -52,10 +123,59 @@
       -ms-flex-align: center;
           align-items: center;
   margin-top: 10rpx;
-  background: #eee;
+  font-weight: bold;
+  color: #323232;
 }
 .contentDate .dateList {
   width: 750rpx;
   height: 720rpx;
-  background: #eee;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 100%;
+}
+.contentDate .dateList .dateRow {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  width: 100%;
+  height: 107rpx;
+}
+.contentDate .dateList .dateRow .dateItem {
+  width: 107.14rpx;
+  height: 107.14rpx;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-weight: 500;
+}
+.contentDate .dateList .dateRow .this_day {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  border: solid 3rpx #DA5751;
+  border-radius: 50%;
+  background: #DA5751;
+  color: #fff;
+  font-weight: bold;
 }

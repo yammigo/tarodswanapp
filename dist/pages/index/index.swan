@@ -1,12 +1,24 @@
 <block>
     <view class="index">
-        <view class="dayHeader"></view>
+        <view class="Pdate">
+            <view class="date_select">2019年1月▼</view>
+        </view>
+        <view class="dayHeader">
+            <view class="day_date">{{d}}</view>
+            <view class="day_info">
+                <view class="day">星期{{anonymousState__temp}}</view>
+                <view class="lunar">初七</view>
+            </view>
+            <view class="today">今</view>
+        </view>
         <view class="contentDate">
             <view class="Header">
                 <view class="date" s-for="daylist" s-for-item="item" s-for-index="index">{{item}}</view>
             </view>
             <view class="dateList">
-                <listdate privateTriggerObserer="{{ _triggerObserer }}"></listdate>
+                <view class="dateRow" s-key="index" s-for="dateItem" s-for-item="item" s-for-index="index">
+                    <view class="{{d == item2 ? 'dateItem this_day' : 'dateItem'}}" s-key="index" s-for="item" s-for-item="item2" s-for-index="index">{{item2}}</view>
+                </view>
             </view>
         </view>
     </view>

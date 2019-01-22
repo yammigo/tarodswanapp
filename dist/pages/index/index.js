@@ -23,27 +23,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// class Listdate extends Component{
-//       constructor(props){
-//          super(props);
-//          this.state={
-//            arr:[0,1,2,3,4,5,6,7]
-//          }
-//       }
-//       render(){
-//         return(
-//           <View className="dateRow">
-//               {
-//                 this.state.arr.map(function(v,i){
-//                   <View className="Item" key={i}><Text></Text>{v}</View>
-//                })
-//              }
-//           </View>
-
-//         )
-//       }
-// }
-
 var Index = (_temp2 = _class = function (_BaseComponent) {
   _inherits(Index, _BaseComponent);
 
@@ -58,8 +37,8 @@ var Index = (_temp2 = _class = function (_BaseComponent) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Index.__proto__ || Object.getPrototypeOf(Index)).call.apply(_ref, [this].concat(args))), _this), _this.$usedState = ["oDate", "oYear", "isleap", "daylist", "lastday", "dayWeek", "y", "m", "d", "w", "dateItem"], _this.config = {
-      navigationBarTitleText: '万年历'
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Index.__proto__ || Object.getPrototypeOf(Index)).call.apply(_ref, [this].concat(args))), _this), _this.$usedState = ["anonymousState__temp", "oDate", "oYear", "isleap", "daylist", "lastday", "dayWeek", "y", "m", "d", "w", "dateItem"], _this.config = {
+      navigationBarTitleText: 'demo'
     }, _this.$$refs = [], _temp), _possibleConstructorReturn(_this, _ret);
   }
 
@@ -85,20 +64,21 @@ var Index = (_temp2 = _class = function (_BaseComponent) {
     key: "initcalender",
     value: function initcalender() {
       //获取当前月份的第一天
+      var self = this;
       var firstDate = new Date(this.state.y, this.state.m, 1);
       var dayWeek = firstDate.getDay();
       var dateItem = [];
-      //生成单页需要的数据一个二维数组
+      //生成单页日历需要的数据一个二维数组
       for (var i = 0; i < 6; i++) {
         dateItem.push([]);
         for (var j = 0; j < 7; j++) {
           var l = i * 7 + j;
           var v = l - dayWeek + 1;
-          console.log(dayWeek);
           if (v <= 0 || v > this.state.lastday[this.state.m]) {
-            dateItem[i][j] = '-';
+            dateItem[i][j] = '-'; //不属于当月的内容先占位
           } else {
             dateItem[i][j] = v;
+            self.getjq(2019, 1, v);
           }
         }
       }
@@ -108,30 +88,61 @@ var Index = (_temp2 = _class = function (_BaseComponent) {
         console.log(this.state.dateItem);
       });
     }
+    //计算节气
+
+  }, {
+    key: "getjq",
+    value: function getjq(yyyy, mm, dd) {
+      if (yyyy == 2016 && mm == 12 && dd == 7) {
+        return "大雪";
+      }
+      if (yyyy == 2016 && mm == 12 && dd == 6) {
+        return "";
+      }
+      mm = mm - 1;
+      var sTermInfo = new Array(0, 21208, 42467, 63836, 85337, 107014, 128867, 150921, 173149, 195551, 218072, 240693, 263343, 285989, 308563, 331033, 353350, 375494, 397447, 419210, 440795, 462224, 483532, 504758);
+      var solarTerm = new Array("小寒", "大寒", "立春", "雨水", "惊蛰", "春分", "清明", "谷雨", "立夏", "小满", "芒种", "夏至", "小暑", "大暑", "立秋", "处暑", "白露", "秋分", "寒露", "霜降", "立冬", "小雪", "大雪", "冬至");
+      var tmp1 = new Date(31556925974.7 * (yyyy - 1900) + sTermInfo[mm * 2 + 1] * 60000 + Date.UTC(1900, 0, 6, 2, 5));
+      var tmp2 = tmp1.getUTCDate();
+      var solarTerms = "";
+      if (tmp2 == dd) {
+        solarTerms = solarTerm[mm * 2 + 1];
+        tmp1 = new Date(31556925974.7 * (yyyy - 1900) + sTermInfo[mm * 2] * 60000 + Date.UTC(1900, 0, 6, 2, 5));
+        tmp2 = tmp1.getUTCDate();
+      }
+      if (tmp2 == dd) {
+        solarTerms = solarTerm[mm * 2];
+      }
+      console.log('获取节气分析数据' + solarTerms);
+      return solarTerms;
+    }
   }, {
     key: "componentWillMount",
     value: function componentWillMount() {
+
       this.initcalender();
+      this.getjq(2019, 2, 22);
+      console.log("componentWillMount");
     }
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      console.log('2');
+      console.log('componentDidMount');
     }
   }, {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
-      console.log('3');
+      console.log('componentWillUnmount');
     }
   }, {
     key: "componentDidShow",
     value: function componentDidShow() {
-      console.log('4');
+      console.log('componentDidShow');
     }
   }, {
     key: "componentDidHide",
     value: function componentDidHide() {
-      console.log('5');
+      console.log('componentDidHide');
     }
   }, {
     key: "_createData",
@@ -139,7 +150,9 @@ var Index = (_temp2 = _class = function (_BaseComponent) {
       this.__state = arguments[0] || this.state || {};
       this.__props = arguments[1] || this.props || {};
       ;
+      var anonymousState__temp = this.__state.daylist == 7 ? "日" : this.__state.daylist[this.__state.w];
       Object.assign(this.__state, {
+        anonymousState__temp: anonymousState__temp,
         _triggerObserer: false
       });
       return this.__state;

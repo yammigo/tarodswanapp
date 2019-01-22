@@ -1,6 +1,4 @@
 {
-  "usingComponents": {
-    "listdate": "./components/list"
-  },
-  "navigationBarTitleText": "万年历"
+  "usingComponents": {},
+  "navigationBarTitleText": "demo"
 }

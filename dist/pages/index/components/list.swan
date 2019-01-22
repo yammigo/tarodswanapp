@@ -1,4 +1,0 @@
-<block>
-    <view class="dateRow">{{arr.map(function (v, i) { <View className="Item" s-key={i}>
-        <Text></Text>{v}</View>; })}}</view>
-</block>
