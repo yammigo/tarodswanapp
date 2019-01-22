@@ -1,0 +1,11 @@
+{
+  "pages": [
+    "pages/index/index"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#DA5751",
+    "navigationBarTitleText": "标题",
+    "navigationBarTextStyle": "white"
+  }
+}

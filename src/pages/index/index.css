@@ -1,0 +1,30 @@
+.dayHeader {
+  width: 100%;
+  height: 150px;
+  background: #DA5751;
+  display: flex;
+  flex-direction: row;
+  color: white;
+}
+.contentDate {
+  display: flex;
+  flex-direction: column;
+}
+.contentDate .Header {
+  display: flex;
+  flex-direction: row;
+}
+.contentDate .Header .date {
+  width: 120px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  background: #eee;
+}
+.contentDate .dateList {
+  width: 750px;
+  height: 720px;
+  background: #eee;
+}
