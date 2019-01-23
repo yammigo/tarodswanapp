@@ -15,6 +15,10 @@ var _index = require("../../npm/@tarojs/taro-swan/index.js");
 
 var _index2 = _interopRequireDefault(_index);
 
+var _calendar = require("../../../lib/calendar.js");
+
+var _calendar2 = _interopRequireDefault(_calendar);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -60,6 +64,9 @@ var Index = (_temp2 = _class = function (_BaseComponent) {
         dateItem: []
       };
     }
+
+    // 创建基础date
+
   }, {
     key: "initcalender",
     value: function initcalender() {
@@ -78,7 +85,6 @@ var Index = (_temp2 = _class = function (_BaseComponent) {
             dateItem[i][j] = '-'; //不属于当月的内容先占位
           } else {
             dateItem[i][j] = v;
-            //    self.getjq(2019,2,v);
           }
         }
       }
@@ -88,41 +94,18 @@ var Index = (_temp2 = _class = function (_BaseComponent) {
         console.log(this.state.dateItem);
       });
     }
-    //计算节气
-
-  }, {
-    key: "getjq",
-    value: function getjq(yyyy, mm, dd) {
-
-      var jq = new Array('0105小寒', '0120大寒', '0203立春', '0218雨水', '0305惊蜇', '0320春分', '0404清明', '0419谷雨', '0505立夏', '0520小满', '0605芒种', '0621夏至', '0706小暑', '0722大暑', '0807立秋', '0822处暑', '0907白露', '0922秋分', '1008寒露', '1023霜降', '1107立冬', '1122小雪', '1206大雪', '1221冬至');
-      var d = new Date("2019/3/7");
-      var s = '';
-      if (mm < 9) {
-        s += '0';
-      }s += '' + mm;
-      if (dd < 10) {
-        s += '0';
-      }s += '' + dd;
-      var i = 0;
-      while (i < jq.length && s >= jq[i]) {
-        i++;
-      }i--;
-
-      console.log('今天是', yyyy, '年', mm, '月', dd, '日 正处于', jq[i].substr(4));
-    }
   }, {
     key: "componentWillMount",
     value: function componentWillMount() {
 
       this.initcalender();
-      this.getjq(2019, 1, 20);
-      this.getjq(2020, 4, 5);
       console.log("componentWillMount");
     }
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
       console.log('componentDidMount');
+      console.log(_calendar2.default);
     }
   }, {
     key: "componentWillUnmount",
