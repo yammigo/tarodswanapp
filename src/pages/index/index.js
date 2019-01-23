@@ -42,7 +42,7 @@ export default class Index extends Component {
             dateItem[i][j]='-' //不属于当月的内容先占位
            }else{
                dateItem[i][j]=v;
-               self.getjq(2019,1,v);
+            //    self.getjq(2019,2,v);
            }
        }
     }
@@ -55,33 +55,25 @@ export default class Index extends Component {
   }
   //计算节气
   getjq(yyyy, mm, dd) {
-        if(yyyy==2016&&mm==12&&dd==7){
-            return "大雪";
-        }
-        if(yyyy==2016&&mm==12&&dd==6){
-            return "";
-        }
-        mm = mm - 1;
-          let sTermInfo = new Array(0, 21208, 42467, 63836, 85337, 107014, 128867, 150921, 173149, 195551, 218072, 240693, 263343, 285989, 308563, 331033, 353350, 375494, 397447, 419210, 440795, 462224, 483532, 504758);
-          let solarTerm = new Array("小寒", "大寒", "立春", "雨水", "惊蛰", "春分", "清明", "谷雨", "立夏", "小满", "芒种", "夏至", "小暑", "大暑", "立秋", "处暑", "白露", "秋分", "寒露", "霜降", "立冬", "小雪", "大雪", "冬至");
-          let tmp1 = new Date((31556925974.7 * (yyyy - 1900) + sTermInfo[mm * 2 + 1] * 60000) + Date.UTC(1900, 0, 6, 2, 5));
-          let tmp2 = tmp1.getUTCDate();
-          let solarTerms = "";
-        if (tmp2 == dd) {
-            solarTerms = solarTerm[mm * 2 + 1];
-            tmp1 = new Date((31556925974.7 * (yyyy - 1900) + sTermInfo[mm * 2] * 60000) + Date.UTC(1900, 0, 6, 2, 5));
-            tmp2 = tmp1.getUTCDate();
-        }
-        if (tmp2 == dd) {
-            solarTerms = solarTerm[mm * 2];
-        }
-        console.log('获取节气分析数据'+solarTerms);
-        return solarTerms;
+    
+    var jq=new Array('0105小寒','0120大寒','0203立春','0218雨水','0305惊蜇','0320春分','0404清明','0419谷雨','0505立夏','0520小满','0605芒种','0621夏至','0706小暑','0722大暑','0807立秋','0822处暑','0907白露','0922秋分','1008寒露','1023霜降','1107立冬','1122小雪','1206大雪','1221冬至');
+    var d=new Date("2019/3/7");
+    var s='';
+    if (mm<9) s+='0';
+    s+=''+(mm);
+    if (dd<10) s+='0';
+    s+=''+dd;
+    var i=0;
+    while(i<jq.length && s>=jq[i]) i++;i--;
+
+    console.log('今天是',yyyy,'年',mm,'月',dd,'日 正处于',jq[i].substr(4));
+    
     }
     componentWillMount () {
 
         this.initcalender();
-        this.getjq(2019,2,22);
+        this.getjq(2019,1,20);
+        this.getjq(2020,4,5);
         console.log("componentWillMount")
    
   }
