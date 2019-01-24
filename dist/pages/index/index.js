@@ -41,7 +41,7 @@ var Index = (_temp2 = _class = function (_BaseComponent) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Index.__proto__ || Object.getPrototypeOf(Index)).call.apply(_ref, [this].concat(args))), _this), _this.$usedState = ["anonymousState__temp", "oDate", "oYear", "isleap", "daylist", "lastday", "dayWeek", "y", "m", "d", "w", "dateItem"], _this.config = {
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Index.__proto__ || Object.getPrototypeOf(Index)).call.apply(_ref, [this].concat(args))), _this), _this.$usedState = ["anonymousState__temp", "oDate", "oYear", "isleap", "daylist", "lastday", "dayWeek", "y", "m", "d", "w", "dateItem", "nondateItem"], _this.config = {
       navigationBarTitleText: 'demo'
     }, _this.$$refs = [], _temp), _possibleConstructorReturn(_this, _ret);
   }
@@ -61,8 +61,38 @@ var Index = (_temp2 = _class = function (_BaseComponent) {
         m: new Date().getMonth(),
         d: new Date().getDate(),
         w: new Date().getDay(),
-        dateItem: []
+        dateItem: [],
+        nondateItem: []
       };
+    }
+
+    /*
+       @param 当前年月日
+       @return object 返回上一个月是多少年、多少月,之后一天date
+     */
+
+  }, {
+    key: "getberfordate",
+    value: function getberfordate(yy, mm, dd) {
+      var opt = {};
+      if (mm - 1 < 0) {
+        opt.year = yy - 1;
+        opt.month = 12;
+        opt.date = 31;
+        opt.isleap = new Date("'" + yy - 1 + "/" + 12 + "/" + 31 + "'").getYear() % 400 == 0 ? 1 : this.oYear % 100 !== 0 && this.oYear % 4 == 0 ? 1 : 0;
+      } else if (mm - 1 == 2) {
+        opt.year = yy;
+        opt.month = mm - 1;
+        opt.isleap = new Date("'" + yy + "/" + 2 + "/" + dd + "'").getYear() % 400 == 0 ? 1 : this.oYear % 100 !== 0 && this.oYear % 4 == 0 ? 1 : 0;
+        opt.date = 28 + opt.isleap;
+      } else {
+        opt.year = yy;
+        opt.month = mm - 1;
+        opt.isleap = opt.isleap = new Date("'" + yy + "/" + opt.month + "/" + dd + "'").getYear() % 400 == 0 ? 1 : this.oYear % 100 !== 0 && this.oYear % 4 == 0 ? 1 : 0;
+        opt.date = this.lastday[opt.month];
+      }
+
+      return opt;
     }
 
     // 创建基础date
@@ -75,13 +105,16 @@ var Index = (_temp2 = _class = function (_BaseComponent) {
       var firstDate = new Date(this.state.y, this.state.m, 1);
       var dayWeek = firstDate.getDay();
       var dateItem = [];
+      var nondateItem = [];
       //生成单页日历需要的数据一个二维数组
       for (var i = 0; i < 6; i++) {
         dateItem.push([]);
+        nondateItem.push([]);
         for (var j = 0; j < 7; j++) {
           var l = i * 7 + j;
           var v = l - dayWeek + 1;
           if (v <= 0 || v > this.state.lastday[this.state.m]) {
+
             dateItem[i][j] = '-'; //不属于当月的内容先占位
           } else {
             dateItem[i][j] = v;
@@ -89,9 +122,11 @@ var Index = (_temp2 = _class = function (_BaseComponent) {
         }
       }
       this.setState({
-        dateItem: dateItem
+        dateItem: dateItem,
+        nondateItem: nondateItem
       }, function () {
         console.log(this.state.dateItem);
+        console.log(this.state.m + 1);
       });
     }
   }, {
@@ -105,7 +140,8 @@ var Index = (_temp2 = _class = function (_BaseComponent) {
     key: "componentDidMount",
     value: function componentDidMount() {
       console.log('componentDidMount');
-      console.log(_calendar2.default);
+      console.log(_calendar2.default.solar2lunar(2051, 12, 31));
+      console.log(this.getberfordate(2019, 4, 1));
     }
   }, {
     key: "componentWillUnmount",
