@@ -22,10 +22,13 @@
           align-items: center;
 }
 .Pdate .date_select {
-  width: 220rpx;
+  width: 300rpx;
   letter-spacing: 3rpx;
   color: white;
   font-size: 30rpx;
+}
+.swiperH {
+  height: 720rpx;
 }
 .dayHeader {
   width: 100%;

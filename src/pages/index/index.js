@@ -1,9 +1,8 @@
 /* eslint-disable react/no-multi-comp */
 import Taro, {Component} from '@tarojs/taro'
-import {View, Text} from '@tarojs/components'
+import {View, Text, Swiper, SwiperItem} from '@tarojs/components'
 import './index.less'
 import {array} from 'prop-types';
-import calendar from "../../../lib/calendar"
 
 export default class Index extends Component {
     config = {
@@ -12,97 +11,165 @@ export default class Index extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            oDate: new Date(),
-            oYear: new Date().getYear(),
-            isleap: this.oYear % 400 == 0 ? 1 : ((this.oYear % 100 !== 0 && this.oYear % 4 == 0) ? 1 : 0), //计算闰平年
-            daylist: ['日', '一', '二', '三', '四', '五', '六'],
-            lastday: [31, 28 + this.isleap, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
-            dayWeek: '',
-            y: new Date().getFullYear(),
-            m: new Date().getMonth(),
-            d: new Date().getDate(),
-            w: new Date().getDay(),
-            dateItem: [],
-            nondateItem: []
-        }
+        this.state = {}
     }
 
-    /*
-       @param 当前年月日
-       @return object 返回上一个月是多少年、多少月,之后一天date
+    /**
+     * 传入当前swiper索引来计算上一年或下一年的date数据
+     * @param {Number}curindex
      */
-    getberfordate(yy, mm, dd) {
-        var opt = {};
-        if (mm-1 < 0) {
-            opt.year=yy-1;
-            opt.month=12;
-            opt.date=31;
-            opt.isleap = new Date("'"+yy-1+ "/" + 12 + "/" + 31+"'").getYear() % 400 == 0 ? 1 : ((this.oYear % 100 !== 0 && this.oYear % 4 == 0) ? 1 : 0);
+    getnewyear(curindex) {
+        let index = curindex.currentTarget.current;
+        let absIndex = index - this.state.currencyIndex;
+        console.log(absIndex);
+        if (absIndex == -11) {
+            var newyear = this.state.y + 1;
+            console.log('当前是'+newyear+"年")
+            let stateinit = {
+                oDate: new Date(newyear, 0, 1),
+                daylist: ['日', '一', '二', '三', '四', '五', '六'],
+                dayWeek: '',
+                dateItem: [],
+                month12date: []
 
-        }else if(mm-1==2){
-            opt.year=yy;
-            opt.month=mm-1;
-            opt.isleap = new Date("'"+yy+ "/" + 2 + "/" + dd+"'").getYear() % 400 == 0 ? 1 : ((this.oYear % 100 !== 0 && this.oYear % 4 == 0) ? 1 : 0);
-            opt.date=28+opt.isleap;
+            }
+            stateinit.oYear = stateinit.oDate.getFullYear();
+            stateinit.isleap = stateinit.oYear % 400 == 0 ? 1 : ((stateinit.oYear % 100 !== 0 && stateinit.oYear % 4 == 0) ? 1 : 0);
+            stateinit.lastday = [31, 28 + stateinit.isleap, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];//12个月的尾号日期表
+            stateinit.y = stateinit.oDate.getFullYear();
+            stateinit.m = stateinit.oDate.getMonth();
+            stateinit.d = stateinit.oDate.getDate();
+            stateinit.w = stateinit.oDate.getDay();
+            for (var y = 0; y < 12; y++) {
+                let firstDate = new Date(stateinit.y, y, 1);
+                let dayWeek = firstDate.getDay();
+                stateinit.month12date.push([]);
+                for (let i = 0; i < 6; i++) {
+                    stateinit.month12date[y].push([]);
+                    for (let j = 0; j < 7; j++) {
+                        let l = i * 7 + j;
+                        let v = l - dayWeek + 1;
+                        if (v <= 0 || v > stateinit.lastday[y]) {
+                            //不属于当月的内容先占位
+                            stateinit.month12date[y][i][j] = '';
+                        } else {
+                            stateinit.month12date[y][i][j] = v;
+
+                        }
+                    }
+                }
+            }
+
+            // 执行数据更新
+            this.setState({month12date:stateinit.month12date,y:newyear});
+
+
+
         }else{
-            opt.year=yy;
-            opt.month=mm-1;
-            opt.isleap =  opt.isleap = new Date("'"+yy+ "/" + opt.month + "/" + dd+"'").getYear() % 400 == 0 ? 1 : ((this.oYear % 100 !== 0 && this.oYear % 4 == 0) ? 1 : 0);
-            opt.date=this.lastday[opt.month];
+            if(absIndex ==11){
+                var newyear = this.state.y - 1;
+                console.log('当前是'+newyear+"年")
+                let stateinit = {
+                    oDate: new Date(newyear, 0, 1),
+                    daylist: ['日', '一', '二', '三', '四', '五', '六'],
+                    dayWeek: '',
+                    dateItem: [],
+                    month12date: []
+
+                }
+                stateinit.oYear = stateinit.oDate.getFullYear();
+                stateinit.isleap = stateinit.oYear % 400 == 0 ? 1 : ((stateinit.oYear % 100 !== 0 && stateinit.oYear % 4 == 0) ? 1 : 0);
+                stateinit.lastday = [31, 28 + stateinit.isleap, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+                stateinit.y = stateinit.oDate.getFullYear();
+                stateinit.m = stateinit.oDate.getMonth();
+                stateinit.d = stateinit.oDate.getDate();
+                stateinit.w = stateinit.oDate.getDay();
+                //核心数据构造
+                for (var y = 0; y < 12; y++) {
+                    let firstDate = new Date(stateinit.y, y, 1);
+                    let dayWeek = firstDate.getDay();
+                    stateinit.month12date.push([]);
+                    for (let i = 0; i < 6; i++) {
+                        stateinit.month12date[y].push([]);
+                        for (let j = 0; j < 7; j++) {
+                            let l = i * 7 + j;
+                            let v = l - dayWeek + 1;
+                            if (v <= 0 || v > stateinit.lastday[y]) {
+                                //不属于当月的内容先占位
+                                stateinit.month12date[y][i][j] = '';
+                            } else {
+                                stateinit.month12date[y][i][j] = v;
+                            }
+                        }
+                    }
+                }
+
+                // 执行数据更新
+                this.setState({month12date:stateinit.month12date,y:newyear});
+            }
         }
-
-        return opt;
-
+        this.setState({currencyIndex:index})
     }
 
-// 创建基础date
+    /**
+     * 创建基础当前年份日历所需要的数据
+     * @param {Number}y
+     * @param {Number}m
+     * @param {Number}d
+     * @returns {Object}
+     */
     initcalender() {
-        //获取当前月份的第一天
-        let self = this
-        let firstDate = new Date(this.state.y, this.state.m, 1);
-        let dayWeek = firstDate.getDay();
-        let dateItem = [];
-        let nondateItem = [];
-        //生成单页日历需要的数据一个二维数组
-        for (let i = 0; i < 6; i++) {
-            dateItem.push([])
-            nondateItem.push([])
-            for (let j = 0; j < 7; j++) {
-                let l = i * 7 + j;
-                let v = l - dayWeek + 1;
-                if (v <= 0 || v > this.state.lastday[this.state.m]) {
+        //初始化state的数据
+        let stateinit = {
+            oDate: new Date(),
+            daylist: ['日', '一', '二', '三', '四', '五', '六'],
+            dayWeek: '',
+            swiper: new Array(12),
+            dateItem: [],
+            month12date: [],
+            currencyIndex: 0,
 
-                    dateItem[i][j] = '-'; //不属于当月的内容先占位
-                } else {
-                    dateItem[i][j] = v;
+        }
+        stateinit.oYear = stateinit.oDate.getYear();
+        stateinit.isleap = stateinit.oYear % 400 == 0 ? 1 : ((stateinit.oYear % 100 !== 0 && stateinit.oYear % 4 == 0) ? 1 : 0);
+        stateinit.lastday = [31, 28 + stateinit.isleap, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        stateinit.y = stateinit.oDate.getFullYear();
+        stateinit.m = stateinit.oDate.getMonth();
+        stateinit.d = stateinit.oDate.getDate();
+        stateinit.w = stateinit.oDate.getDay();
+        stateinit.currencyIndex=stateinit.m
+        //一次生成1年所需要的数据生成一个多维数组
+        for (var y = 0; y < 12; y++) {
+            let firstDate = new Date(stateinit.y, y, 1);
+            let dayWeek = firstDate.getDay();
+            stateinit.month12date.push([]);
+            for (let i = 0; i < 6; i++) {
+                stateinit.month12date[y].push([]);
+                for (let j = 0; j < 7; j++) {
+                    let l = i * 7 + j;
+                    let v = l - dayWeek + 1;
+                    if (v <= 0 || v > stateinit.lastday[y]) {
+                        //不属于当月的内容先占位
+                        stateinit.month12date[y][i][j] = '';
+                    } else {
+                        stateinit.month12date[y][i][j] = v;
 
+                    }
                 }
             }
         }
-        this.setState({
-            dateItem: dateItem,
-            nondateItem: nondateItem
-        }, function () {
-            console.log(this.state.dateItem);
-            console.log(this.state.m + 1);
-        })
 
+        //初始化原始state
+        this.setState(stateinit)
+        return stateinit
 
     }
 
     componentWillMount() {
-
         this.initcalender();
-        console.log("componentWillMount")
-
     }
 
     componentDidMount() {
-        console.log('componentDidMount');
-        console.log(calendar.solar2lunar(2051, 12, 31));
-        console.log(this.getberfordate(2019,4,1));
-
     }
 
     componentWillUnmount() {
@@ -123,7 +190,7 @@ export default class Index extends Component {
         return (
             <View className='index'>
                 <View className="Pdate">
-                    <View className="date_select">2019年1月▼</View>
+                    <View className="date_select">{this.state.y}年{this.state.m + 1}月▼</View>
                 </View>
                 <View className="dayHeader">
                     <View className="day_date">
@@ -131,7 +198,7 @@ export default class Index extends Component {
                     </View>
                     <View className="day_info">
                         <View
-                            className="day">星期{this.state.daylist == 7 ? "日" : this.state.daylist[this.state.w]}</View>
+                            className="day">星期{this.state.d == 7 ? "日" : this.state.daylist[this.state.w]}</View>
                         <View className="lunar">初七</View>
                     </View>
                     <View className="today">
@@ -149,25 +216,47 @@ export default class Index extends Component {
 
                         }
                     </View>
-                    <View className="dateList">
+                    <Swiper
+                        className='test-h swiperH'
+                        indicatorColor='#999'
+                        indicatorActiveColor='#333'
+                        circular={true}
+                        duration={300}
+                        current={this.state.m}
+                        onChange={this.getnewyear.bind(this, this.current)}
+                        indicatorDots>
                         {
-                            this.state.dateItem.map(function (item, index) {
+                            this.state.month12date.map(function (item1, index1) {
                                 return (
-                                    <View className="dateRow" key={index}>
-                                        {
-                                            item.map(function (item2, index) {
-                                                return (
-                                                    <View
-                                                        className={this.state.d == item2 ? "dateItem this_day" : "dateItem"}
-                                                        key={index}>{item2}</View>
-                                                )
-                                            })
-                                        }
-                                    </View>
+                                    <SwiperItem key={index1}>
+                                        <View className="dateList">
+
+                                            {
+                                                item1.map(function (item2, index2) {
+                                                    return (
+                                                        <View className="dateRow" key={index2}>
+                                                            {
+                                                                item2.map(function (item3, index3) {
+                                                                    return (
+                                                                        <View
+                                                                            className={this.state.d == item3 ? "dateItem this_day" : "dateItem"}
+                                                                            key={index3}>{item3}</View>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </View>
+                                                    )
+                                                })
+                                            }
+                                        </View>
+                                    </SwiperItem>
                                 )
                             })
                         }
-                    </View>
+
+
+                    </Swiper>
+
                 </View>
             </View>
         )

@@ -1,7 +1,7 @@
 <block>
     <view class="index">
         <view class="Pdate">
-            <view class="date_select">2019年1月▼</view>
+            <view class="date_select">{{y}}年{{m + 1}}月▼</view>
         </view>
         <view class="dayHeader">
             <view class="day_date">{{d}}</view>
@@ -15,11 +15,15 @@
             <view class="Header">
                 <view class="date" s-for="daylist" s-for-item="item" s-for-index="index">{{item}}</view>
             </view>
-            <view class="dateList">
-                <view class="dateRow" s-key="index" s-for="dateItem" s-for-item="item" s-for-index="index">
-                    <view class="{{d == item2 ? 'dateItem this_day' : 'dateItem'}}" s-key="index" s-for="item" s-for-item="item2" s-for-index="index">{{item2}}</view>
-                </view>
-            </view>
+            <swiper class="test-h swiperH" indicator-color="#999" indicator-active-color="#333" circular="{{true}}" duration="{{300}}" current="{{m}}" bindchange="getnewyear" indicator-dots="{{true}}" data-e-change-so="this" data-e-change-a-a="{{current}}">
+                <swiper-item s-key="index1" s-for="month12date" s-for-item="item1" s-for-index="index1">
+                    <view class="dateList">
+                        <view class="dateRow" s-key="index2" s-for="item1" s-for-item="item2" s-for-index="index2">
+                            <view class="{{d == item3 ? 'dateItem this_day' : 'dateItem'}}" s-key="index3" s-for="item2" s-for-item="item3" s-for-index="index3">{{item3}}</view>
+                        </view>
+                    </view>
+                </swiper-item>
+            </swiper>
         </view>
     </view>
 </block>
